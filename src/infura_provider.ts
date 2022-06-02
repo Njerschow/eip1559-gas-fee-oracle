@@ -16,6 +16,7 @@ export class CustomProvider extends providers.BaseProvider {
     super(network)
     this.txSpeed = txSpeed
   }
+
   async getGasPrice (): Promise<BigNumber> {
     const gasEstimate: GasInfo = await axios.get(GAS_ORACLE_URL)
 
@@ -26,7 +27,7 @@ export class CustomProvider extends providers.BaseProvider {
   async getFeeData (): Promise<providers.FeeData> {
     const gasEstimate: GasInfo = await axios.get(GAS_ORACLE_URL)
     return {
-      gasPrice: await this.getGasPrice(), //used for legacy, iiuc legacy clients will be overpaying slightly with EIP 1559 depending on the desired speed
+      gasPrice: await this.getGasPrice(), // used for legacy, iiuc legacy clients will be overpaying slightly with EIP 1559 depending on the desired speed
       maxFeePerGas: BigNumber.from(gasEstimate.baseFee! * 2),
       maxPriorityFeePerGas: BigNumber.from(
         gasEstimate.baseFee! + gasEstimate[this.txSpeed]

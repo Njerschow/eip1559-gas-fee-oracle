@@ -89,7 +89,7 @@ export class GasOracle {
     this.initEstimator()
   }
 
-  async initEstimator () {
+  async refreshDesiredBlockHistory () {
     const feeHistory = await web3.eth.getFeeHistory(
       NUM_HIST_BLOCKS,
       'pending',
@@ -98,6 +98,10 @@ export class GasOracle {
     this.blockHistory = formatFeeHistory(feeHistory, false)
     // @ts-ignore library has oldestBlock typed as a number, but it's a hex string
     this.currentOldest = toDec(feeHistory.oldestBlock)
+  }
+
+  async initEstimator () {
+    await this.refreshDesiredBlockHistory()
 
     this.updateEstimate()
     setInterval(this.updateEstimate.bind(this), 6000) // update slightly faster than 2x per block (~15s)
@@ -116,9 +120,8 @@ export class GasOracle {
     // if the new oldest block is newer than the newest block we have
     const currentNewest = this.currentOldest + (this.blockHistory.length - 1) // sub 1 for pending block
     if (newOldest - currentNewest > newBlocks.length) {
-      throw new Error(
-        'Unimplemented logic where we need to pull more blocks than we have.'
-      )
+      // just refresh full history if we somehow missed more than 4 blocks
+      await this.refreshDesiredBlockHistory()
     }
     const newNewest = newOldest + (newBlocks.length - 1) // sub 1 for pending block
     const blocksToAdd = newNewest - currentNewest
