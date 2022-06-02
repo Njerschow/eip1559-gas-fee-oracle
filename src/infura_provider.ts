@@ -1,7 +1,7 @@
 import { BigNumber, providers } from 'ethers'
 import axios from 'axios'
-import { GasInfo } from './gas_oracle'
 import { Network, Networkish } from '@ethersproject/networks'
+import { GasInfo } from './oracle'
 
 const GAS_ORACLE_URL = 'http://localhost:3000/gas'
 
