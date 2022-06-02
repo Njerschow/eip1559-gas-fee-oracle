@@ -54,49 +54,6 @@ function formatFeeHistory (
   return blocks
 }
 
-async function analyzeGas () {
-  const percs = { SAFELOW, STANDARD, FASTEST }
-  web3.eth
-    .getFeeHistory(NUM_HIST_BLOCKS, 'pending', Object.values(percs))
-    .then(result => {
-      const blocks = formatFeeHistory(result, false)
-      const percentialFeeSums = new Array(
-        blocks[0].priorityFeePerGas.length
-      ).fill(0)
-
-      for (const block of blocks) {
-        for (let i = 0; i < block.priorityFeePerGas.length; i++) {
-          percentialFeeSums[i] += block.priorityFeePerGas[i]
-        }
-      }
-      const percentialFeeAverages = percentialFeeSums.map(ps =>
-        Math.round(ps / blocks.length)
-      )
-
-      console.log(
-        'Max Priority Fee Estimates:\n' +
-          Object.keys(percs).reduce((res, p, i) => {
-            return res + `${p}:\t ${percentialFeeAverages[i]}\n`
-          }, '')
-      )
-
-      web3.eth.getBlock('pending').then(block => {
-        console.log(
-          'Total fees:\n' +
-            Object.keys(percs).reduce((res, p, i) => {
-              return (
-                res +
-                `${p}:\t ${Number(block.baseFeePerGas) +
-                  percentialFeeAverages[i]}\n`
-              )
-            }, '')
-        )
-      })
-    })
-}
-
-analyzeGas()
-
 interface BaseFeeMixin {
   baseFee?: number
 }
