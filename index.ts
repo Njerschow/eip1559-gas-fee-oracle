@@ -1,5 +1,5 @@
 import express from 'express'
-import { GasOracle } from './gas_oracle'
+import { GasOracle } from './src/gas_oracle'
 
 const gasOracle = new GasOracle()
 

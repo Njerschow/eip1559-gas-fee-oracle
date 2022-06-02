@@ -12,8 +12,6 @@ const SAFELOW = 35
 const STANDARD = 60
 const FASTEST = 90
 
-const blockHistory = []
-
 interface FormattedBlock {
   number: 'pending' | number
   baseFeePerGas: number
