@@ -1,9 +1,13 @@
 import Web3 from 'web3'
 import { FeeHistoryResult } from 'web3-eth'
 
+if (!process.env.INFURA_API_KEY) {
+  throw new Error('INFURA_API_KEY environment variable not set')
+}
+
 const web3 = new Web3(
   new Web3.providers.HttpProvider(
-    'https://mainnet.infura.io/v3/db432560f9fa454db8b74e26a04d2269'
+    'https://mainnet.infura.io/v3/' + process.env.INFURA_API_KEY
   )
 )
 
