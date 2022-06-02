@@ -105,7 +105,6 @@ describe('', function () {
     gasOracle = new oracle.GasOracle(6)
     await new Promise(r => setTimeout(r, 1000))
 
-    console.log(gasOracle.currentEstimate)
     const est = gasOracle.currentEstimate
     expect(est.baseFee).to.be.eql(9999)
     expect(est.low).to.be.eql(939524096)
